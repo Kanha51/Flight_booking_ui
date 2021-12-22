@@ -1,0 +1,16 @@
+export const AUTH_SIGN_UP = "AUTH_SIGN_UP";
+export const AUTH_ERROR = "AUTH_ERROR";
+export const AUTH_SIGN_OUT = "AUTH_SIGN_OUT";
+export const AUTH_SIGN_IN = "AUTH_SIGN_IN";
+export const GET_SECRET = "GET_SECRET";
+export const FLIGHT_ERROR = "FLIGHT_ERROR";
+export const SEARCH_FLIGHT = "SEARCH_FLIGHT";
+export const BOOK_FLIGHT = "BOOK_FLIGHT";
+export const CLEAR_FLIGHT = "CLEAR_FLIGHT";
+export const FLIGHT_BOOK = "FLIGHT_BOOK";
+export const CLEAR_BOOKING = "CLEAR_BOOKING";
+export const GET_BOOKINGS = "GET_BOOKINGS";
+export const CANCEL_BOOKING = "CANCEL_BOOKING";
+export const CLEAR_FLIGHT_ERROR = "CLEAR_FLIGHT_ERROR";
+export const USER_DETAILS_ERROR = "USER_DETAILS_ERROR";
+export const ADMIN_AUTH_SIGN_IN = "ADMIN_AUTH_SIGN_IN";
