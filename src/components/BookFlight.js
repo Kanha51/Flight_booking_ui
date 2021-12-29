@@ -5,9 +5,10 @@ import { compose } from "redux";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import moment from "moment";
-
+import axios from "axios";
 import * as actions from "../actions";
 import CustomInput from "./CustomInput";
+import { DISCOUNT_CHECK } from "../actions/urlConstant";
 
 class BookFlight extends Component {
   constructor(props) {
@@ -21,6 +22,11 @@ class BookFlight extends Component {
       userDetails: {},
       passangers: [],
       number: 0,
+      seatTypes: 0,
+      reqDetails: {},
+      couponValue: 0,
+      total: this.props.flight.cost + this.props.flight.tax,
+      discount: 0,
     };
     // console.log(this.props.user.userDetails);
   }
@@ -40,15 +46,50 @@ class BookFlight extends Component {
   handleShow = () => this.setState({ show: true });
 
   async onSubmit(formData) {
-    console.log(formData);
     const res = await this.props.validateUserDetails(formData);
-    if (res) {
-      await this.props.addUserDetails(formData, this.props.flight);
-      this.state.showForm = false;
-    }
+    this.state.reqDetails = formData;
+    this.handleShow();
   }
+  handleShow = () => this.setState({ show: true });
+  handleClose = () => this.setState({ show: false });
+
+  bookTicket = () => {
+    console.log(this.state.reqDetails);
+
+    this.props.addUserDetails(
+      this.state.reqDetails,
+      this.props.flight,
+      this.state
+    );
+
+    this.state.showForm = false;
+    this.props.history.push("/bookinghistory");
+  };
+  changeBusinessType = () => {
+    if (this.state.seatTypes === 0) {
+      this.state.seatTypes = 1;
+    } else if (this.state.seatTypes === 1) {
+      this.state.seatTypes = 0;
+    }
+  };
+
+  async checkDiscount() {
+    const data = {
+      discountCode: this.state.couponValue,
+    };
+    console.log(data);
+    axios.post(DISCOUNT_CHECK, data).then((res) => {
+      this.setState({ discount: res.data.discountPercentage });
+      this.setState({
+        total:
+          this.state.total -
+          (this.state.total / 100) * res.data.discountPercentage,
+      });
+    });
+  }
+
   redirect() {
-    this.props.history.push("/bookings");
+    this.props.history.push("/bookinghistory");
   }
   render() {
     const { handleSubmit } = this.props;
@@ -198,9 +239,6 @@ class BookFlight extends Component {
                       required
                       component={CustomInput}
                     ></Field>
-                  </fieldset>
-
-                  <fieldset>
                     <Field
                       name="lastName"
                       type="text"
@@ -210,8 +248,6 @@ class BookFlight extends Component {
                       required
                       component={CustomInput}
                     ></Field>
-                  </fieldset>
-                  <fieldset>
                     <Field
                       name="birthdate"
                       type="date"
@@ -221,9 +257,6 @@ class BookFlight extends Component {
                       required
                       component={CustomInput}
                     ></Field>
-                  </fieldset>
-
-                  <fieldset>
                     <Field
                       name="govtProof"
                       type="text"
@@ -233,25 +266,12 @@ class BookFlight extends Component {
                       required
                       component={CustomInput}
                     ></Field>
-                  </fieldset>
-                  <fieldset>
                     <Field
                       name="govtProofId"
                       type="text"
                       id="govtProofId"
                       label="Govt. Proof Id"
                       placeholder="Govt. Proof Id"
-                      required
-                      component={CustomInput}
-                    ></Field>
-                  </fieldset>
-                  <fieldset>
-                    <Field
-                      name="seatType"
-                      type="radio"
-                      id="seatType"
-                      label="Seat Type"
-                      placeholder="Seat Type"
                       required
                       component={CustomInput}
                     ></Field>
@@ -281,6 +301,72 @@ class BookFlight extends Component {
             </Card.Body>
           </Card>
         )}
+
+        <Modal
+          show={this.state.show}
+          onHide={this.handleClose}
+          backdrop="static"
+          keyboard={false}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Final Submit</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            Please Select Seat Type
+            <select
+              id="seatType"
+              onChange={this.changeBusinessType}
+              value={this.state.value}
+            >
+              <option value="0">Business</option>
+              <option value="1">Non - Business</option>
+            </select>
+            <div>
+              <table>
+                <tr>
+                  <th>Seat Cost </th>
+                  <th> {this.props.flight.cost}</th>
+                </tr>
+                <tr>
+                  <th>Tax</th>
+                  <th> {this.props.flight.tax}</th>
+                </tr>
+                <tr>
+                  <th>Discount Cupon</th>
+                  <th>
+                    <input
+                      type="text"
+                      id="input"
+                      value={this.state.couponValue}
+                      onChange={(e) =>
+                        this.setState({ couponValue: e.target.value })
+                      }
+                    />
+                    <button type="submit" onClick={() => this.checkDiscount()}>
+                      Apply
+                    </button>
+                  </th>
+                </tr>
+                <tr>
+                  <th>Discount %</th>
+                  <th> {this.state.discount}</th>
+                </tr>
+                <tr>
+                  <th>Total</th>
+                  <th> {this.state.total}</th>
+                </tr>
+              </table>
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={this.handleClose}>
+              Cancel
+            </Button>
+            <Button variant="primary" onClick={this.bookTicket}>
+              Book
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   }
@@ -288,10 +374,8 @@ class BookFlight extends Component {
 
 function mapStateToProps(state) {
   return {
-    errorMessage: state.user.errorMessage,
     flight: state.flight.flight,
     user: state.auth.user,
-    userDetails: state.user.userDetails,
   };
 }
 

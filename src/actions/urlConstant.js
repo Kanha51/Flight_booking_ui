@@ -13,3 +13,9 @@ export const USER_SIGN_UP_URL = USER_BASE_URL + "/signup";
 export const USER_BOOK_TICKET = USER_BASE_URL + "/booking";
 export const USER_FLIGHT_HISTORY = USER_BASE_URL + "/flighthistory";
 export const USER_FLIGHT_CANCEL = USER_BASE_URL + "/cancel";
+
+export const DISCOUNT_BASE_URL =
+  "https://dk71q6lig2.execute-api.us-east-2.amazonaws.com/prod/api/v1.0/";
+export const DISCOUNT_SAVE = DISCOUNT_BASE_URL + "save";
+export const DISCOUNT_GET = DISCOUNT_BASE_URL + "get";
+export const DISCOUNT_CHECK = DISCOUNT_BASE_URL + "checkdiscount";

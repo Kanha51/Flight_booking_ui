@@ -314,7 +314,7 @@ export const validateUserDetails = (data) => {
   };
 };
 
-export const addUserDetails = (formData, flight) => {
+export const addUserDetails = (formData, flight, sData) => {
   return async (dispatch) => {
     try {
       const config = {
@@ -333,12 +333,13 @@ export const addUserDetails = (formData, flight) => {
         flightTo: flight.toFlight,
         flightToCode: flight.toFlightCode,
         mealType: flight.meals,
-        price: flight.cost,
+        price: sData.total,
         startDate: flight.startDate,
-        seatType: 0,
+        seatType: sData.seatTypes,
         landingTime: flight.landingTime,
         takeOffTime: flight.takeOffTime,
         dateTime: localStorage.getItem("FLIGHT_DATE"),
+        discountPercentage: sData.discountPercentage,
       };
 
       await axios.post(USER_BOOK_TICKET, data, config);

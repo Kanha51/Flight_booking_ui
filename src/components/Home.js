@@ -229,10 +229,13 @@ export class Home extends Component {
               <Card.Body>
                 <Card.Title>{flight.airlineName}</Card.Title>
                 <Card.Title>
-                  Take Off Time : {moment(flight.takeOffTime).format("h:mm A")}
+                  Take Off Time : {moment(flight.takeOffTime).format("h:mm A")}{" "}
+                  &emsp;&emsp; Landing Time :{" "}
+                  {moment(flight.landingTime).format("h:mm A")}
                 </Card.Title>
                 <Card.Title>
-                  Landing Time : {moment(flight.landingTime).format("h:mm A")}
+                  Business Seats : {flight.businessSeats} &emsp;&emsp;
+                  Non-Business Seats : {flight.nonBusinesSeats}
                 </Card.Title>
                 <Card.Text>
                   <table style={{ width: "100%", tableLayout: "fixed" }}>

@@ -19,6 +19,8 @@ import BookFlight from "./components/BookFlight";
 import ManageFlight from "./components/ManageFlight";
 import History from "./components/BookingHistory";
 
+import Discount from "./components/Discount";
+
 const jwtToken = localStorage.getItem("JWT_TOKEN");
 const authHeader = "Bearer " + jwtToken;
 console.log(authHeader);
@@ -52,6 +54,7 @@ function App() {
             <Route path="/bookings" exact strict component={Bookings} />
             <Route path="/book" exact strict component={BookFlight} />
             <Route path="/bookinghistory" exact strict component={History} />
+            <Route path="/manageDiscount" exact strict component={Discount} />
           </div>
         </div>
       </BrowserRouter>

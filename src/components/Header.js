@@ -88,7 +88,7 @@ class Header extends Component {
                     <NavLink
                       className="d-inline p-2 bg-primary text-white"
                       style={{ color: "inherit", textDecoration: "inherit" }}
-                      to="/addairline"
+                      to="/manageDiscount"
                     >
                       Manage Discounts
                     </NavLink>
